@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "autenticarTds2-L",
+    "slug": "autenticarTds2-L",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  },
+  "extra": {
+    "firebaseApiKey": "AIzaSyCO2Z91rPJvptxLdRMdPYnYauMyKhsTz5k",
+    "firebaseAuthDomain": "autenticartds2l.firebaseapp.com",
+    "firebaseProjectId": "autenticartds2l",
+    "firebaseStorageBucket": "autenticartds2l.firebasestorage.app",
+    "firebaseMessagingSenderId": "933914752572",
+    "firebaseAppId": "1:933914752572:web:1d6c3d59110320d9d23539",
+    "firebaseMeasurementId": "G-F4ZLWV3RSM"
+  }
+}
