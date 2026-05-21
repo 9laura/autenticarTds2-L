@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { autenticacao } from '../config/firebaseConfig';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function TelaCadastro({ navigation }) {
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
   const fazerCadastro = async () => {
-    if (!email || !senha) {
-      setErro('Preencha todos os campos.');
-      return;
-    }
     try {
-      await createUserWithEmailAndPassword(autenticacao, email, senha);
+      const usuarioCriado = await createUserWithEmailAndPassword(autenticacao, email, senha);
+
+      // Salvar o nome do usuário no displayName
+      await updateProfile(usuarioCriado.user, {
+        displayName: nome
+      });
+
       navigation.navigate('Login');
     } catch (erro) {
       setErro('Erro ao cadastrar. Tente novamente.');
@@ -24,37 +26,40 @@ export default function TelaCadastro({ navigation }) {
 
   return (
     <View style={estilos.container}>
-      <View style={estilos.form}>
-        <Text style={estilos.title}>Cadastro</Text>
-        <View style={estilos.inputContainer}>
-          <Ionicons name="mail" size={20} color="#666" style={estilos.icon} />
-          <TextInput
-            style={estilos.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        </View>
-        <View style={estilos.inputContainer}>
-          <Ionicons name="lock-closed" size={20} color="#666" style={estilos.icon} />
-          <TextInput
-            style={estilos.input}
-            placeholder="Senha"
-            value={senha}
-            onChangeText={setSenha}
-            secureTextEntry
-          />
-        </View>
-        {erro ? <Text style={estilos.erro}>{erro}</Text> : null}
-        <TouchableOpacity style={estilos.button} onPress={fazerCadastro}>
-          <Text style={estilos.buttonText}>Cadastrar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.link} onPress={() => navigation.goBack()}>
-          <Text style={estilos.linkText}>Já tem conta? Faça login</Text>
-        </TouchableOpacity>
-      </View>
+      <Text style={estilos.titulo}>Crie sua conta</Text>
+
+      <Text style={estilos.label}>Nome</Text>
+      <TextInput
+        style={estilos.input}
+        value={nome}
+        onChangeText={setNome}
+        placeholder="Seu nome"
+      />
+
+      <Text style={estilos.label}>Email</Text>
+      <TextInput
+        style={estilos.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="seu@email.com"
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <Text style={estilos.label}>Senha</Text>
+      <TextInput
+        style={estilos.input}
+        value={senha}
+        onChangeText={setSenha}
+        secureTextEntry
+        placeholder="Digite uma senha"
+      />
+
+      <TouchableOpacity style={estilos.botao} onPress={fazerCadastro}>
+        <Text style={estilos.textoBotao}>Cadastrar</Text>
+      </TouchableOpacity>
+
+      {erro ? <Text style={estilos.erro}>{erro}</Text> : null}
     </View>
   );
 }
@@ -62,70 +67,36 @@ export default function TelaCadastro({ navigation }) {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     padding: 20,
-  },
-  form: {
-    width: '100%',
-    maxWidth: 400,
-    backgroundColor: '#fff',
-    padding: 30,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 30,
-    color: '#333',
-  },
-  inputContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-    backgroundColor: '#fafafa',
+    justifyContent: 'center',
+    backgroundColor: '#f4f7ff',
   },
-  icon: {
-    marginRight: 10,
-  },
+  titulo: { fontSize: 26, fontWeight: '700', marginBottom: 20, color: '#213547' },
+  label: { alignSelf: 'flex-start', marginLeft: '5%', marginBottom: 6, color: '#34495e' },
   input: {
-    flex: 1,
+    width: '90%',
+    maxWidth: 420,
+    borderWidth: 1,
+    borderColor: '#dbe6ff',
+    backgroundColor: '#fff',
+    marginBottom: 12,
+    padding: 12,
+    borderRadius: 8,
+  },
+  botao: {
+    width: '90%',
+    maxWidth: 420,
+    backgroundColor: '#3b82f6',
     paddingVertical: 12,
-    fontSize: 16,
-  },
-  erro: {
-    color: '#e74c3c',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#27ae60',
-    paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 20,
+    marginTop: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  link: {
-    alignItems: 'center',
-  },
-  linkText: {
-    color: '#27ae60',
-    fontSize: 16,
-  },
+  textoBotao: { color: '#fff', fontWeight: '600' },
+  erro: { color: 'red', marginTop: 10 },
 });

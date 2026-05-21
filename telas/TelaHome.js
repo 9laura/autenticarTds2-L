@@ -1,25 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { autenticacao } from '../config/firebaseConfig';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function TelaHome() {
   const fazerLogout = () => {
     signOut(autenticacao);
   };
 
+  const nomeUsuario = autenticacao.currentUser?.displayName
+    || 'Usuário';
+
+  const emailUsuario = autenticacao.currentUser?.email || '';
+
   return (
     <View style={estilos.container}>
       <View style={estilos.card}>
-        <Ionicons name="home" size={60} color="#3498db" style={estilos.icon} />
-        <Text style={estilos.welcome}>Bem-vindo!</Text>
-        <Text style={estilos.email}>{autenticacao.currentUser?.email}</Text>
-        <TouchableOpacity style={estilos.button} onPress={fazerLogout}>
-          <Ionicons name="log-out" size={20} color="#fff" style={estilos.buttonIcon} />
-          <Text style={estilos.buttonText}>Sair</Text>
-        </TouchableOpacity>
+        <Text style={estilos.titulo}>Bem-vindo,</Text>
+        <Text style={estilos.nome}>{nomeUsuario}!</Text>
+        <TouchableOpacity style={estilos.botaoSair} onPress={fazerLogout}>
+        <Text style={estilos.textoBotao}>Sair</Text>
+      </TouchableOpacity>
       </View>
+
+      
     </View>
   );
 }
@@ -27,52 +31,43 @@ export default function TelaHome() {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f4f7ff',
   },
   card: {
-    width: '100%',
-    maxWidth: 400,
+    width: '90%',
+    maxWidth: 520,
     backgroundColor: '#fff',
-    padding: 40,
-    borderRadius: 10,
+    padding: 24,
+    borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  icon: {
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
     marginBottom: 20,
   },
-  welcome: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
-  },
-  email: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 30,
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#e74c3c',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
+  titulo: { fontSize: 18, color: '#6b7280' },
+  nome: { fontSize: 28, fontWeight: '700', color: '#1f2937', marginTop: 4 },
+  email: { fontSize: 14, color: '#64748b', marginTop: 8 },
+  botaoSair: {
+    backgroundColor: '#ef4444',
+    paddingVertical: 12,
+    paddingHorizontal: 28,
     borderRadius: 8,
   },
-  buttonIcon: {
-    marginRight: 10,
+  botaoSair: {
+    backgroundColor: '#ef4444',
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    borderRadius: 8,
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  textoBotao: { color: '#fff', fontWeight: '600' },
 });
